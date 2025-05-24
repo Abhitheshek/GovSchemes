@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <g fill="#13005A">
+    <circle cx="250" cy="250" r="200" fill="none" stroke="#13005A" stroke-width="8"/>
+    <circle cx="250" cy="250" r="40" fill="#13005A"/>
+    <!-- 24 spokes of the Ashoka Chakra -->
+    <path d="M250 250 L250 50" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L250 450" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L50 250" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L450 250" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L83.5 83.5" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L416.5 416.5" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L83.5 416.5" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L416.5 83.5" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L150 100" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L350 400" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L100 150" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L400 350" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L100 350" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L400 150" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L150 400" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L350 100" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L175 75" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L325 425" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L75 175" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L425 325" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L75 325" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L425 175" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L175 425" stroke="#13005A" stroke-width="8"/>
+    <path d="M250 250 L325 75" stroke="#13005A" stroke-width="8"/>
+  </g>
+</svg>
