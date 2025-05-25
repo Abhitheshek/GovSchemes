@@ -7,8 +7,7 @@ import PopularSchema from './components/popularSchema'
 import StepsSection from './components/StepsSection'
 import Footer from './components/Footer'
 import FAQ from './components/FAQ'
-
-
+import GlobalChatButton from './chatbot/GlobalChatButton'
 
 import { useState, useEffect } from 'react';
 import LoadingAnimation from './components/LoadingAnimation';
@@ -40,19 +39,15 @@ export default function Home() {
 
   return (
     <main>
-  
-      
-     
       <div>
-       
         <Navbar />
-      <Hero />
-      <SchemaCategories/>
-      
-      <PopularSchema/>
-      <StepsSection />
-      <FAQ/>
-      <Footer/>
+        <Hero />
+        <SchemaCategories/>
+        <PopularSchema/>
+        <StepsSection />
+        <FAQ/>
+        <Footer/>
+        <GlobalChatButton />
       </div>
     </main>
   );
