@@ -196,7 +196,7 @@ export default function Hero() {
               ></div>
 
               {/* 3D Text with hover effects */}
-              <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold mb-6 text-white perspective-800">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-white perspective-800">
                 <span
                   className="block transform hover:scale-105 transition-all duration-300 text-transparent bg-clip-text bg-blue-500 hover:bg-blue-600"
                   style={{
@@ -267,7 +267,7 @@ export default function Hero() {
               </div>
 
               {/* Floating elements */}
-              <div className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-gradient-to-r from-blue-500 to-sky-500 p-1 animate-pulse-slow">
+              <div className="absolute -bottom-10 -right-4 md:-right-10 w-28 h-28 md:w-40 md:h-40 rounded-full bg-gradient-to-r from-blue-500 to-sky-500 p-1 animate-pulse-slow">
                 <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
                   <div className="text-center">
                     <p className="text-sm font-medium text-gray-300">New Schemes</p>
