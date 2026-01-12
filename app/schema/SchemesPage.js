@@ -84,9 +84,9 @@ const SchemesPage = ({
           <motion.button
             whileHover={{ x: -4 }}
             onClick={() => setCurrentView('main')}
-            className="flex items-center text-blue-600 hover:text-blue-700 transition-colors mb-4 group px-3 py-1.5 rounded-lg hover:bg-blue-50/50"
+            className="flex items-center bg-blue-600 text-white  transition-colors mb-4 group px-3 py-1.5 rounded-lg hover:bg-blue-700"
           >
-            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1  transition-transform" />
             <span className="font-medium">Back to Home</span>
           </motion.button>
 

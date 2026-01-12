@@ -11,6 +11,7 @@ import { handleError, parseJsonResponse } from './utils';
 import { Loader2 } from 'lucide-react';
 import SchemaCategories from '../components/SchemaCard';
 import './styles.css';
+import { useSearchParams } from 'next/navigation';
 
 const IndianGovSchemesPortal = () => {
     const [currentView, setCurrentView] = useState('main');
@@ -25,6 +26,15 @@ const IndianGovSchemesPortal = () => {
         year: []
     });
     const [currentCategory, setCurrentCategory] = useState('');
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        // Check if category parameter exists and auto-generate schemes
+        const category = searchParams.get('category');
+        if (category && getSchemePrompts[category]) {
+            generateSchemes(category);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         // Reset search and filters when changing views

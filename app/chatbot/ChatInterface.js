@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, X, Bot, Loader2, Settings, Trash2, ChevronDown, ArrowRight } from 'lucide-react';
+import { Send, X, Bot, Settings, Trash2, ChevronDown, ArrowRight } from 'lucide-react';
 import MarkdownFormatter from './MarkdownFormatter';
 
-const ChatInterface = ({ 
-  isOpen, 
-  setIsOpen, 
-  messages, 
-  setMessages, 
-  inputMessage, 
-  setInputMessage, 
-  isLoading, 
+const ChatInterface = ({
+  isOpen,
+  setIsOpen,
+  messages,
+  setMessages,
+  inputMessage,
+  setInputMessage,
+  isLoading,
   setIsLoading,
   userProfile,
   setUserProfile
@@ -48,30 +48,58 @@ const ChatInterface = ({
     };
 
     setMessages(prev => [...prev, userMsg]);
+    const currentMessage = inputMessage;
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://chatbot-ibm.onrender.com/chat', {
+      // Use Gemini API instead of external chatbot
+      const prompt = `You are SAHAYATA, an AI assistant for Indian government schemes. 
+      User Profile: Age ${userProfile.age}, State: ${userProfile.state}, Education: ${userProfile.education}
+      
+      User Question: ${currentMessage}
+      
+      Provide a helpful, personalized response about government schemes, scholarships, or general assistance based on their profile. Keep responses conversational and informative.`;
+
+      const api = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      
+      if (!api) {
+        throw new Error('API key not found');
+      }
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemma-3n-e2b-it:generateContent?key=${api}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_profile: userProfile,
-          question: inputMessage
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.95,
+            topK: 40,
+            maxOutputTokens: 2048,
+          }
         })
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`API call failed: ${response.status}`);
       }
 
       const data = await response.json();
       
+      if (!data.candidates || data.candidates.length === 0) {
+        throw new Error('No response generated');
+      }
+
       const botMsg = {
         id: Date.now() + 1,
-        text: data.response || data.answer || data.message || JSON.stringify(data, null, 2),
+        text: data.candidates[0].content.parts[0].text,
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -81,7 +109,7 @@ const ChatInterface = ({
       console.error('Error:', error);
       const errorMsg = {
         id: Date.now() + 1,
-        text: `**Error:** Sorry, I encountered an issue while processing your request. Please check your connection and try again.\n\n*Error details: ${error.message}*`,
+        text: `**Error:** Sorry, I encountered an issue while processing your request. Please try again.\n\n*Error details: ${error.message}*`,
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -127,8 +155,8 @@ const ChatInterface = ({
 
   const isProfileValid = () => {
     return (
-      userProfile.age > 0 && 
-      userProfile.state && userProfile.state.trim() !== '' && 
+      userProfile.age > 0 &&
+      userProfile.state && userProfile.state.trim() !== '' &&
       userProfile.education && userProfile.education.trim() !== ''
     );
   };
@@ -136,20 +164,16 @@ const ChatInterface = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-end p-4 z-50 bg-black/20 backdrop-blur-sm">
+    <div className="fixed inset-0 flex items-center justify-end p-1 z-50 bg-black/20 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md h-[90vh] flex flex-col overflow-hidden animate-fadeIn">
         {/* Chat Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-5 py-4 rounded-t-2xl flex justify-between items-center shadow-md">
+        <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-5 py-4 rounded-t-2xl flex justify-between items-center shadow-md relative z-10">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center shadow-inner">
               <Bot className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-semibold text-lg">SAHAYATA</h3>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                <p className="text-xs text-blue-100">Online</p>
-              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -197,14 +221,14 @@ const ChatInterface = ({
                 </button>
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <div>
                 <label className="text-xs font-medium text-gray-600 block mb-1">Age</label>
                 <input
                   type="number"
                   value={userProfile.age}
-                  onChange={(e) => setUserProfile({...userProfile, age: parseInt(e.target.value) || 20})}
+                  onChange={(e) => setUserProfile({ ...userProfile, age: parseInt(e.target.value) || 20 })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                 />
               </div>
@@ -213,7 +237,7 @@ const ChatInterface = ({
                 <input
                   type="text"
                   value={userProfile.state}
-                  onChange={(e) => setUserProfile({...userProfile, state: e.target.value})}
+                  onChange={(e) => setUserProfile({ ...userProfile, state: e.target.value })}
                   className="w-full p-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                   placeholder="Enter your state"
                 />
@@ -223,7 +247,7 @@ const ChatInterface = ({
                 <div className="relative">
                   <select
                     value={userProfile.education}
-                    onChange={(e) => setUserProfile({...userProfile, education: e.target.value})}
+                    onChange={(e) => setUserProfile({ ...userProfile, education: e.target.value })}
                     className="w-full p-2.5 border border-gray-300 rounded-lg text-sm appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                   >
                     <option value="High School">High School</option>
@@ -240,7 +264,7 @@ const ChatInterface = ({
 
         {!profileCompleted ? (
           /* User Profile Form */
-          <div 
+          <div
             ref={profileFormRef}
             className="flex-1 flex flex-col overflow-y-auto bg-gradient-to-b from-gray-50 to-white"
           >
@@ -249,36 +273,36 @@ const ChatInterface = ({
                 <h2 className="text-xl font-bold text-gray-800 mb-2">Welcome to AI Assistant</h2>
                 <p className="text-gray-600">Please tell us a bit about yourself to get started</p>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
                   <label className="text-sm font-medium text-gray-700 block mb-2">Age</label>
                   <input
                     type="number"
                     value={userProfile.age}
-                    onChange={(e) => setUserProfile({...userProfile, age: parseInt(e.target.value) || 20})}
+                    onChange={(e) => setUserProfile({ ...userProfile, age: parseInt(e.target.value) || 20 })}
                     className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     placeholder="Enter your age"
                   />
                 </div>
-                
+
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
                   <label className="text-sm font-medium text-gray-700 block mb-2">State</label>
                   <input
                     type="text"
                     value={userProfile.state}
-                    onChange={(e) => setUserProfile({...userProfile, state: e.target.value})}
+                    onChange={(e) => setUserProfile({ ...userProfile, state: e.target.value })}
                     className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     placeholder="Enter your state"
                   />
                 </div>
-                
+
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
                   <label className="text-sm font-medium text-gray-700 block mb-2">Education</label>
                   <div className="relative">
                     <select
                       value={userProfile.education}
-                      onChange={(e) => setUserProfile({...userProfile, education: e.target.value})}
+                      onChange={(e) => setUserProfile({ ...userProfile, education: e.target.value })}
                       className="w-full p-3 border border-gray-300 rounded-lg text-sm appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     >
                       <option value="">Select your education level</option>
@@ -291,16 +315,15 @@ const ChatInterface = ({
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-6 sticky bottom-0 bg-white p-4 border-t border-gray-100">
                 <button
                   onClick={handleProfileSubmit}
                   disabled={!isProfileValid()}
-                  className={`w-full p-4 flex items-center justify-center gap-2 rounded-xl text-white font-medium shadow-md transition-all ${
-                    isProfileValid() 
-                      ? 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:shadow-lg transform hover:scale-[1.02]' 
-                      : 'bg-gray-300 cursor-not-allowed'
-                  }`}
+                  className={`w-full p-4 flex items-center justify-center gap-2 rounded-xl text-white font-medium shadow-md transition-all ${isProfileValid()
+                    ? 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:shadow-lg transform hover:scale-[1.02]'
+                    : 'bg-gray-300 cursor-not-allowed'
+                    }`}
                 >
                   Continue to Chat
                   <ArrowRight className="w-4 h-4" />
@@ -315,9 +338,9 @@ const ChatInterface = ({
           /* Chat Interface */
           <>
             {/* Messages */}
-            <div 
+            <div
               ref={chatContainerRef}
-              className="flex-1 overflow-y-auto p-5 space-y-5 bg-gradient-to-b from-gray-50 to-white"
+              className="flex-1 overflow-y-auto p-5 pt-6 space-y-5 bg-gradient-to-b from-gray-50 to-white"
             >
               {messages.map((message) => (
                 <div
@@ -329,21 +352,19 @@ const ChatInterface = ({
                       <Bot className="w-4 h-4 text-indigo-600" />
                     </div>
                   )}
-                  <div 
-                    className={`max-w-[80%] ${
-                      message.sender === 'user'
-                        ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl rounded-tr-none shadow-md'
-                        : 'bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none shadow-sm'
-                    } px-4 py-3`}
+                  <div
+                    className={`max-w-[80%] ${message.sender === 'user'
+                      ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-2xl rounded-tr-none shadow-md'
+                      : 'bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none shadow-sm'
+                      } px-4 py-3`}
                   >
                     {message.sender === 'bot' ? (
                       <MarkdownFormatter content={message.text} />
                     ) : (
                       <p className="text-sm leading-relaxed">{message.text}</p>
                     )}
-                    <p className={`text-xs mt-1.5 ${
-                      message.sender === 'user' ? 'text-indigo-100' : 'text-gray-500'
-                    }`}>
+                    <p className={`text-xs mt-1.5 ${message.sender === 'user' ? 'text-indigo-100' : 'text-gray-500'
+                      }`}>
                       {message.timestamp}
                     </p>
                   </div>
@@ -396,7 +417,7 @@ const ChatInterface = ({
                   <Send className="w-5 h-5" />
                 </button>
               </div>
-              
+
             </div>
           </>
         )}

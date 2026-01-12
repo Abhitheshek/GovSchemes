@@ -8,6 +8,7 @@ import StepsSection from './components/StepsSection'
 import Footer from './components/Footer'
 import FAQ from './components/FAQ'
 import GlobalChatButton from './chatbot/GlobalChatButton'
+import FinalChatbot from './finalChatbot'
 
 import { useState, useEffect } from 'react';
 import LoadingAnimation from './components/LoadingAnimation';
@@ -47,7 +48,7 @@ export default function Home() {
         <StepsSection />
         <FAQ/>
         <Footer/>
-        <GlobalChatButton />
+        <FinalChatbot/>
       </div>
     </main>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Menu, X, Search } from 'lucide-react';
+import { ChevronDown, Menu, X, Search, Bot } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Navbar() {
@@ -9,12 +9,12 @@ export default function Navbar() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  
+
   // Handle scroll events
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
-      
+
       // Determine active section based on scroll position
       const sections = ['home', 'categories', 'schemes', 'about', 'faq'];
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -28,7 +28,7 @@ export default function Navbar() {
         }
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -42,22 +42,21 @@ export default function Navbar() {
   ];
 
   return (
-    <nav 
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrollPosition > 50 
-          ? 'py-2 bg-white/90 backdrop-blur-md shadow-md border-b border-blue-100/50' 
-          : 'py-4 bg-transparent backdrop-blur-sm'
-      }`}
+    <nav
+      className={`fixed w-full z-50 transition-all duration-300 ${scrollPosition > 50
+        ? 'py-2 bg-white/90 backdrop-blur-md shadow-md border-b border-blue-100/50'
+        : 'py-4 bg-transparent backdrop-blur-sm'
+        }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-          <div>
-            <Image src="/lionsymbol.png" alt="Logo" width={35} height={35} />
-          </div>
+            <div>
+              <Image src="/lionsymbol.png" alt="Logo" width={35} height={35} />
+            </div>
             <div className="relative">
-              <span 
+              <span
                 className="text-2xl font-bold"
               >
                 <span className="text-blue-600">Gov</span>
@@ -70,14 +69,13 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
-              <Link 
+              <Link
                 key={item.id}
-                href={`#${item.id}`} 
-                className={`relative px-4 py-2 font-medium transition-all duration-200 rounded-lg ${
-                  activeSection === item.id 
-                    ? 'text-blue-600 bg-blue-50' 
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/50'
-                }`}
+                href={`#${item.id}`}
+                className={`relative px-4 py-2 font-medium transition-all duration-200 rounded-lg ${activeSection === item.id
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50/50'
+                  }`}
               >
                 {item.label}
                 {activeSection === item.id && (
@@ -85,18 +83,22 @@ export default function Navbar() {
                 )}
               </Link>
             ))}
-            
+
+           
+           
+             
+
             {/* Search button */}
-            <button 
+            <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="ml-2 p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
             >
               <Search className="w-5 h-5" />
             </button>
-            
+
             {/* Login button */}
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="ml-4 px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-all shadow-sm hover:shadow-md"
             >
               Login
@@ -104,7 +106,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Navigation Button */}
-          <button 
+          <button
             className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
@@ -129,7 +131,7 @@ export default function Navbar() {
                 className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <button 
+              <button
                 onClick={() => setIsSearchOpen(false)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
@@ -141,36 +143,43 @@ export default function Navbar() {
       )}
 
       {/* Mobile Menu */}
-      <div 
-        className={`md:hidden fixed inset-0 bg-blue-600 z-40 transition-all duration-300 ${
-          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+      <div
+        className={`md:hidden fixed inset-0 bg-blue-600 z-40 transition-all duration-300 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
       >
         <div className="container mx-auto px-4 py-20 bg-white">
           <div className="flex flex-col space-y-4 ">
             {navItems.map((item, index) => (
-              <Link 
+              <Link
                 key={item.id}
-                href={`#${item.id}`} 
-                className={`py-3 px-4 text-lg font-medium rounded-lg transition-all duration-200  ${
-                  activeSection === item.id 
-                    ? 'text-white bg-blue-500' 
-                    : 'text-black hover:bg-blue-700/70'
-                }`}
+                href={`#${item.id}`}
+                className={`py-3 px-4 text-lg font-medium rounded-lg transition-all duration-200  ${activeSection === item.id
+                  ? 'text-white bg-blue-500'
+                  : 'text-black hover:bg-blue-700/70'
+                  }`}
                 onClick={() => setIsMenuOpen(false)}
-                style={{ 
+                style={{
                   transitionDelay: `${index * 0.05}s`
                 }}
               >
                 {item.label}
               </Link>
             ))}
-            
+
+            <Link
+              href="/scheme-chatbot"
+              className="flex items-center gap-2 py-3 px-4 text-lg font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-all border border-indigo-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Bot className="w-5 h-5" />
+              Scheme Bot
+            </Link>
+
             <div className="pt-4 mt-4 border-t border-blue-500/30">
-             
-              
-              <Link 
-                href="/login" 
+
+
+              <Link
+                href="/login"
                 className="block w-full text-center px-5 py-3 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-50 transition-all"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -178,12 +187,12 @@ export default function Navbar() {
               </Link>
             </div>
           </div>
-          
+
           {/* Government emblem */}
-         
-          
+
+
           {/* Close button */}
-          <button 
+          <button
             onClick={() => setIsMenuOpen(false)}
             className="absolute top-4 right-4 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-50"
             aria-label="Close menu"
@@ -192,7 +201,7 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-      
+
       {/* Add CSS animations */}
       <style jsx global>{`
         @keyframes fadeDown {

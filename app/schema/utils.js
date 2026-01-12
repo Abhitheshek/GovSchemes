@@ -10,9 +10,21 @@ export const handleError = (error) => {
 export const parseJsonResponse = (response) => {
   try {
     const jsonMatch = response.match(/\[?\s*\{[\s\S]*\}\s*\]?/);
-    return jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+    if (!jsonMatch) return null;
+    
+    // Simple JSON cleaning - just remove trailing commas
+    let cleanJson = jsonMatch[0]
+      .replace(/,\s*([}\]])/g, '$1')
+      .replace(/\n/g, ' ')
+      .trim();
+    
+    return JSON.parse(cleanJson);
   } catch (error) {
     console.error('JSON parsing error:', error);
+    try {
+      const jsonMatch = response.match(/\[?\s*\{[\s\S]*\}\s*\]?/);
+      console.log('Failed JSON:', jsonMatch?.[0]?.substring(0, 500));
+    } catch (e) {}
     return null;
   }
 };

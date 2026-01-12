@@ -8,12 +8,27 @@ export default function SchemaCategories() {
   const [activeTab, setActiveTab] = useState('all');
   const router = useRouter();
 
+  const handleCardClick = (schemaId) => {
+    // Map schema IDs to the same categories used in schema page
+    const categoryMap = {
+      'State': 'state',
+      'National': 'national', 
+      'Scholarships': 'scholarship',
+      'Financial': 'financial'
+    };
+    
+    const category = categoryMap[schemaId];
+    if (category) {
+      router.push(`/schema?category=${category}`);
+    }
+  };
+
   
   
   const schemas = {
     all: [
       {
-        id: 1,
+        id: "State",
         name: "State Schemes",
         category: "State Level",
         image: "/kishan.jpg",
@@ -31,7 +46,7 @@ export default function SchemaCategories() {
         }
       },
       {
-        id: 2,
+        id: 'National',
         name: "National Schemes",
         category: "National Level",
         image: "/education.jpg",
@@ -50,7 +65,7 @@ export default function SchemaCategories() {
         }
       },
       {
-        id: 3,
+        id: "Scholarships",
         name: "Scholarships",
         category: "Education",
         color:"bg-yellow-100",
@@ -68,7 +83,7 @@ export default function SchemaCategories() {
         }
       },
       {
-        id: 4,
+        id: "Financial",
         name: "Financial Aids",
         category: "Financial Support",
         image: "/scholarship4.jpg",
@@ -108,7 +123,7 @@ export default function SchemaCategories() {
           {schemas[activeTab].map((schema) => (
             <div key={schema.id}
             
-            onClick={() => router.push(`/schema#categories`)}
+            onClick={() => handleCardClick(schema.id)}
              className="group relative">
               
               <div className ={`relative flex flex-col md:flex-row ${schema.color} rounded-2xl ${schema.borderColor} border-1 shadow-2xl overflow-hidden`}>

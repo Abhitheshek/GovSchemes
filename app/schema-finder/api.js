@@ -1,49 +1,48 @@
 // Enhanced API service for Gemini API calls with improved response handling
 
 export const callGeminiAPI = async (prompt, apiKey) => {
-  if (!apiKey) {
-    throw new Error('Please provide your Gemini API key');
+  const api = apiKey || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+  if (!api) {
+    throw new Error('API key not found. Please check your environment variables or enter a key.');
   }
 
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }],
-        generationConfig: {
-          temperature: 0.2,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 8192,
-        }
-      })
-    });
+  // Debugging: Log key presence (don't log the full key for security)
+  console.log('Calling Gemini API with key present:', !!api);
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(`API call failed: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
-    }
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemma-3n-e2b-it:generateContent?key=${api}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      contents: [{
+        parts: [{
+          text: prompt
+        }]
+      }],
+      generationConfig: {
+        temperature: 0.2,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 8192,
+      }
+    })
+  });
 
-    const data = await response.json();
-    
-    if (!data.candidates || data.candidates.length === 0) {
-      throw new Error('No response generated. Please try again.');
-    }
-    
-    return data.candidates[0].content.parts[0].text;
-  } catch (error) {
-    console.error('API call error:', error);
-    throw new Error(`Failed to get response: ${error.message}`);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`API call failed: ${response.status} - ${errorData.error?.message || response.statusText}`);
   }
+
+  const data = await response.json();
+
+  if (!data.candidates || data.candidates.length === 0) {
+    throw new Error('No response generated from Gemini API.');
+  }
+
+  return data.candidates[0].content.parts[0].text;
 };
-
 export const searchSchemesAPI = async (formData, apiKey) => {
   // Create a more detailed prompt with specific instructions for better formatting
   const prompt = `Find Indian government schemes based on these criteria:
@@ -77,12 +76,16 @@ export const searchSchemesAPI = async (formData, apiKey) => {
 
   try {
     const response = await callGeminiAPI(prompt, apiKey);
-    
+
+    if (!response) {
+      throw new Error('API returned empty response');
+    }
+
     // Clean the response to extract JSON
     const jsonMatch = response.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
       const schemes = JSON.parse(jsonMatch[0]);
-      
+
       // Add default values for any missing fields
       return schemes.map(scheme => ({
         iconType: 'social',

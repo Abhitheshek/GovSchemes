@@ -18,14 +18,14 @@ const SchemeHeader = ({ scheme, onBack, onShowVideo }) => (
           alt={scheme.name}
           className="w-full h-full object-cover opacity-10"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/50 to-blue-900/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-600 to-blue-600" />
       </div>
     )}
     
     <div className="relative container mx-auto px-4 py-12">
       <button
         onClick={onBack}
-        className="flex items-center text-white/80 hover:text-white mb-6 transition-colors"
+        className="flex items-center p-2 bg-amber-50  text-black/80 cursor-pointer rounded-3xl hover:text-black mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Schemes

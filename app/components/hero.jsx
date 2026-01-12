@@ -198,7 +198,7 @@ export default function Hero() {
               {/* 3D Text with hover effects */}
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-white perspective-800">
                 <span
-                  className="block transform hover:scale-105 transition-all duration-300 text-transparent bg-clip-text bg-blue-500 hover:bg-blue-600"
+                  className="block transform hover:scale-105 transition-all duration-300 text-transparent bg-clip-text bg-blue-500 cursor-pointer hover:bg-blue-600"
                   style={{
                     textShadow: '0 8px 16px rgba(79, 70, 229, 0.3)',
                     transform: `translateZ(20px) rotateX(${mousePosition.y * 5}deg) rotateY(${mousePosition.x * -5}deg)`,
@@ -208,7 +208,7 @@ export default function Hero() {
                   Explore
                 </span>
                 <span
-                  className="block transform hover:scale-105 transition-all duration-300 text-transparent bg-clip-text bg-gradient-to-r from-black via-gray-950 to-gray-900 hover:bg-black"
+                  className="block transform hover:scale-105 transition-all duration-300 text-transparent bg-clip-text bg-gradient-to-r from-black cursor-pointer via-gray-950 to-gray-900 hover:bg-black"
                   style={{
                     textShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
                     transform: `translateZ(20px) rotateX(${mousePosition.y * 5}deg) rotateY(${mousePosition.x * -5}deg)`,
@@ -229,11 +229,11 @@ export default function Hero() {
               {/* Interactive buttons with hover effects */}
               <Link href="/schema" className="group relative px-8 py-3 overflow-hidden rounded-full bg-transparent border-2 border-black text-black font-medium transition-all hover:text-white">
                 <span className="absolute inset-0 w-0 bg-black transition-all duration-500 ease-out group-hover:w-full"></span>
-                <span className="relative flex items-center">
+                <span className="relative text-md flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                   </svg>
-                  Discover Government Schemes
+                  Search Schemes
                 </span>
               </Link>
 
