@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import MainPage from './MainPage';
 import SchemesPage from './SchemesPage';
@@ -13,7 +13,7 @@ import SchemaCategories from '../components/SchemaCard';
 import './styles.css';
 import { useSearchParams } from 'next/navigation';
 
-const IndianGovSchemesPortal = () => {
+const SchemaContent = () => {
     const [currentView, setCurrentView] = useState('main');
     const [schemes, setSchemes] = useState([]);
     const [selectedScheme, setSelectedScheme] = useState(null);
@@ -185,6 +185,14 @@ const IndianGovSchemesPortal = () => {
                 }
             `}</style>
         </>
+    );
+};
+
+const IndianGovSchemesPortal = () => {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
+            <SchemaContent />
+        </Suspense>
     );
 };
 
