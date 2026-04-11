@@ -236,7 +236,7 @@ export default function SchemeChatbot({ isOpen, setIsOpen }) {
 
         // Check if local API is available
         try {
-            await fetch('https://schemaagent-production.up.railway.app/');
+            await fetch('https://schemaagent.onrender.com/');
         } catch (e) {
             console.log('Checking local API...');
         }
@@ -290,7 +290,7 @@ export default function SchemeChatbot({ isOpen, setIsOpen }) {
         setInputMessage('');
 
         try {
-            const schemeResponse = await fetch('https://schemaagent-production.up.railway.app/scrape', {
+            const schemeResponse = await fetch('https://schemaagent.onrender.com/scrape', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
